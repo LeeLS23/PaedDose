@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paeds Dose Calculation</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Paeds Dose Calculation</h1>
+  
+  <form id="dose-calculation-form" class="input-section">
+    <label for="weight">Patient's Weight (kg):</label>
+    <input type="number" id="weight" placeholder="Enter weight in kg" required min="0">
+
+    <label for="age">Patient's Age (years):</label>
+    <input type="number" id="age" placeholder="Enter age in years" required min="0">
+
+    <button type="submit">Calculate Doses</button>
+  </form>
+  
+  <table id="medication-table">
+    <thead>
+      <tr>
+        <th>MEDICATION</th>
+        <th>STRENGTH</th>
+        <th>DOSE RANGE (MG/KG)</th>
+        <th>ML</th>
+        <th>MG</th>
+        <th>FREQUENCY</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Medication rows will be added dynamically by JavaScript -->
+    </tbody>
+  </table>
+
+<script src="script.js"></script>
+<script>
+// Prevent the default form submission which refreshes the page
+document.getElementById('dose-calculation-form').addEventListener('submit', function(event) {
+  event.preventDefault();
+  calculateDoses();
+});
+</script>
+</body>
+</html>
