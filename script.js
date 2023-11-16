@@ -110,7 +110,56 @@ function calculateDoses() {
   var doseMgIsoniazid = dosePerKgIsoniazid * weight;
   var doseMlIsoniazid = doseMgIsoniazid / 40; // 40MG/ML strength
 
+  // Chlorpheniramine calculation
+  var doseMgChlorpheniramine;
+  if (age < 2) {
+    doseMgChlorpheniramine = "CONTRAINDICATED";
+  } else {
+    doseMgChlorpheniramine = Math.min(0.1 * weight, age <= 5 ? 1 : 2); 
+  }
+  var doseMlChlorpheniramine = doseMgChlorpheniramine !== "CONTRAINDICATED" ? (doseMgChlorpheniramine / 2) * 5 : "CONTRAINDICATED"; // Assuming 2MG/5ML strength
 
+ // Lactulose calculation
+  var doseMlLactulose = 0.5 * weight; 
+  
+  // Ferric Ammonium Citrate (Prophylaxis) calculation
+  var doseMlFerricAmmoniumCitrate = (2 * weight) * 5 / 84; // Formula based on weight
+
+	// Ferric Ammonium Citrate (Treatment) calculation
+  var doseMlFerricAmmoniumCitrateTreatment = (6 * weight) * 5 / 84; // Formula based on weight
+  
+  // Nystatin calculation
+  var doseMlNystatin = age < 2 ? 1 : 5; // 1 ml for <2 years old, 5 ml for >=2 years old	
+
+	// Albendazole Syrup calculation	
+  var doseMlAlbendazole;
+  if (age < 1) {
+    doseMlAlbendazole = "CONTRAINDICATED";
+  } else if (age < 2) {
+    doseMlAlbendazole = "5.0";
+  } else {
+    doseMlAlbendazole = "10.0";
+  }
+  
+   // Albendazole Tablet calculation
+  var doseTabletsAlbendazole;
+  if (age < 1) {
+    doseTabletsAlbendazole = "CONTRAINDICATED";
+  } else if (age < 2) {
+    doseTabletsAlbendazole = "1";
+  } else {
+    doseTabletsAlbendazole = "2";
+  }
+  
+  // Multivitamin Syrup calculation
+  var doseMlMultivitamin;
+  if (age < 1) {
+    doseMlMultivitamin = "CONTRAINDICATED";
+  } else if (age < 4) {
+    doseMlMultivitamin = "1";
+  } else {
+    doseMlMultivitamin = "2.5";
+  }
 
 
 	//Row in table
@@ -256,10 +305,99 @@ function calculateDoses() {
     <td><10 yo: 10mg/kg, =>10yo: 5mg/kg</td>
     <td>-</td> 
   </tr>`;
+  
+  var rowChlorpheniramine = `
+  <tr>
+    <td>Chlorpheniramine</td>
+    <td class="ml-column">${typeof doseMlChlorpheniramine === "number" ? doseMlChlorpheniramine.toFixed(1) : doseMlChlorpheniramine}</td>
+    <td class="mg-column">${typeof doseMgChlorpheniramine === "number" ? doseMgChlorpheniramine.toFixed(1) : doseMgChlorpheniramine}</td>
+    <td>TDS</td> <!-- Frequency -->
+    <td>2MG/5ML</td>
+    <td>0.1MG/KG</td>
+    <td>Max 1mg (<=5 yrs), 2mg (> 5 yrs)</td>
+  </tr>`;
+  
+  var rowLactulose = `
+  <tr>
+    <td>Lactulose</td>
+    <td class="ml-column">${doseMlLactulose.toFixed(1)}</td>
+    <td class="mg-column">-</td> 
+    <td>OD/BD</td> 
+    <td>3.35G/5ML</td>
+    <td>0.5ML/KG</td>
+    <td>-</td> 
+  </tr>`;
+  
+  var rowFerricAmmoniumCitrate = `
+  <tr>
+    <td>Ferric Ammonium Citrate (Prophylaxis)</td>
+    <td class="ml-column">${doseMlFerricAmmoniumCitrate.toFixed(1)}</td>
+    <td class="mg-column">-</td> <!-- No mg calculation required -->
+    <td>OD</td> <!-- Frequency -->
+    <td>400MG/5ML</td>
+    <td>${(2*5/84).toFixed(2)}ML/KG</td>
+    <td>-</td> 
+  </tr>`;
+  
+   var rowFerricAmmoniumCitrateTreatment = `
+  <tr>
+    <td>Ferric Ammonium Citrate (Treatment)</td>
+    <td class="ml-column">${doseMlFerricAmmoniumCitrateTreatment.toFixed(1)}</td>
+    <td class="mg-column">-</td> <!-- No mg calculation required -->
+    <td>OD</td> <!-- Frequency -->
+    <td>400MG/5ML</td>
+    <td>${(6*5/84).toFixed(2)}ML/KG</td>
+    <td>-</td>
+  </tr>`;
+  
+  var rowNystatin = `
+  <tr>
+    <td>Nystatin</td>
+    <td class="ml-column">${doseMlNystatin}</td>
+    <td class="mg-column">${doseMlNystatin}</td> <!-- Same as ml since 1MG/ML strength -->
+    <td>QID</td> 
+    <td>100000IU/ML</td>
+    <td> < 12 MONTH-OLD	100000IU, >12 MONTH-OLD	500000IU</td> 
+    <td>-</td> 
+  </tr>`;
+  
+  var rowAlbendazole = `
+  <tr>
+    <td>Albendazole Syrup</td>
+    <td class="ml-column">${doseMlAlbendazole}</td>
+    <td class="mg-column">-</td> 
+    <td>STAT</td>
+    <td>200MG/5ML</td>
+    <td>1-2 YEAR-OLD: 200mg, ≥ 2 YEAR-OLD: 400mg</td> 
+    <td>-</td> 
+  </tr>`;
+  
+  var rowAlbendazoleTablet = `
+  <tr>
+    <td>Albendazole Tablet</td>
+    <td class="ml-column">-</td> <!-- No ml unit for tablet -->
+    <td class="mg-column">${doseTabletsAlbendazole !== "CONTRAINDICATED" ? doseTabletsAlbendazole * 200 : doseTabletsAlbendazole}</td> <!-- 200mg per tablet -->
+    <td>STAT</td> <!-- Frequency -->
+    <td>200MG/TABLET</td>
+    <td>-</td> <!-- Dosage per kg not applicable -->
+    <td>${doseTabletsAlbendazole} tablet/s </td> <!-- Number of tablets -->
+  </tr>`;
+  
+  var rowMultivitamin = `
+  <tr>
+    <td>Multivitamin Syrup</td>
+    <td class="ml-column">${doseMlMultivitamin}</td>
+    <td class="mg-column">${doseMlMultivitamin !== "CONTRAINDICATED" ? (parseFloat(doseMlMultivitamin) * 1).toFixed(1) : doseMlMultivitamin}</td> <!-- 1mg/ml strength -->
+    <td>OD</td> <!-- Frequency -->
+    <td>1MG/ML</td>
+    <td>-</td> <!-- Dosage per kg not applicable -->
+    <td>-</td> <!-- Additional information if needed -->
+  </tr>`;
 
   var tableBody = document.getElementById('medication-table').querySelector('tbody');
   tableBody.innerHTML = rowParacetamol + rowSuppository + rowPromethazine + rowPrednisolone + rowAmoxycillin + rowCephalexin + rowCloxacillin + rowErythromycin + rowAUGMENTIN
-  + rowDiphenhydramine + rowBromhexine + rowSalbutamol + rowIsoniazid;
+  + rowDiphenhydramine + rowBromhexine + rowSalbutamol + rowIsoniazid + rowChlorpheniramine + rowLactulose + rowFerricAmmoniumCitrate + rowFerricAmmoniumCitrateTreatment 
+  +rowNystatin + rowAlbendazole +rowAlbendazoleTablet + rowMultivitamin;
 }
 
 document.getElementById('dose-calculation-form').addEventListener('submit', function(event) {
