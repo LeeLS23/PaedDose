@@ -11,7 +11,7 @@
   
   <form id="dose-calculation-form" class="input-section">
     <label for="weight">Patient's Weight (kg):</label>
-    <input type="number" id="weight" placeholder="Enter weight in kg" required min="0">
+    <input type="number" id="weight" placeholder="Enter weight in kg" step="0.1" required min="0">
 
     <label for="age">Patient's Age (years):</label>
     <input type="number" id="age" placeholder="Enter age in years" required min="0">
@@ -23,11 +23,12 @@
     <thead>
       <tr>
         <th>MEDICATION</th>
-        <th>STRENGTH</th>
-        <th>DOSE RANGE (MG/KG)</th>
-        <th>ML</th>
+		<th>ML</th>
         <th>MG</th>
         <th>FREQUENCY</th>
+		<th>STRENGTH</th>
+		<th>DOSE RANGE (MG/KG)</th>
+		<th>REMARKS</th>
       </tr>
     </thead>
     <tbody>
